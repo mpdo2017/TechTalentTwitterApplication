@@ -49,8 +49,17 @@ public class UserService {
     }
 
     public User getLoggedInUser(User user) {
+        userRepository.findByUsername(user.getUsername());
         // you'll have to create and implement getLoggedInUser
         //return userRepository.getLoggedInUser(user);
         return null;
+    }
+
+    public User saveNewUser(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setActive(1);
+        Role userRole = roleRepository.findByRole("USER");
+        user.setRoles(new HashSet<>(Arrays.asList(userRole)));
+        return userRepository.save(user);
     }
 }

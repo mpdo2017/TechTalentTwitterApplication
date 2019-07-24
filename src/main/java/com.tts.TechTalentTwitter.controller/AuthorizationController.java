@@ -41,8 +41,8 @@ public class AuthorizationController {
         if (userExists != null) {
             bindingResult.rejectValue("username", "error.user", "Username is already taken");
         }
+
         if (!bindingResult.hasErrors()) {
-            // did you mean userService.save(user)?
             userService.saveNewUser(user);
             model.addAttribute("success", "Sign up successful!");
             model.addAttribute("user", new User());
