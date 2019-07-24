@@ -36,11 +36,13 @@ public class AuthorizationController {
 
     @PostMapping(value = "/signup")
     public String createNewUser(@Valid User user, BindingResult bindingResult, Model model) {
+        // you were missing some getters/setters
         User userExists = userService.findByUsername(user.getUsername());
         if (userExists != null) {
             bindingResult.rejectValue("username", "error.user", "Username is already taken");
         }
         if (!bindingResult.hasErrors()) {
+            // did you mean userService.save(user)?
             userService.saveNewUser(user);
             model.addAttribute("success", "Sign up successful!");
             model.addAttribute("user", new User());

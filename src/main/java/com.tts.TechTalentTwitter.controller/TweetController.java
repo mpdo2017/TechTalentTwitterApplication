@@ -41,6 +41,9 @@ public class TweetController {
 
     @PostMapping(value = "/tweets")
     public String submitTweetForm(@Valid Tweet tweet, BindingResult bindingResult, Model model) {
+        // I'm not sure you need to pass in a user if you know there is only one user logged in
+        // I would have to know more about what you want to do, but you should be able to just get the user
+        // without passing a user object as you have now in getLoggedInUser
         User user = userService.getLoggedInUser();
         if (!bindingResult.hasErrors()) {
             tweet.setUser(user);

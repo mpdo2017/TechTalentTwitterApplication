@@ -49,8 +49,8 @@ public class UserService {
     }
 
     public User getLoggedInUser(User user) {
-
-       //* return userRepository.getLoggedInUser(user);
-
+        // you'll have to create and implement getLoggedInUser
+        //return userRepository.getLoggedInUser(user);
+        return null;
     }
 }
