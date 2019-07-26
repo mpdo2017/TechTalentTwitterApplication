@@ -26,24 +26,23 @@ public class TweetController {
     @Autowired
     private TweetService tweetService;
 
-    @GetMapping(value = {"/tweets", "/"})
+
+    @GetMapping({"/tweets", "/"})
     public String getFeed(Model model) {
         List<Tweet> tweets = tweetService.findAll();
         model.addAttribute("tweetList", tweets);
         return "feed";
     }
 
-    @GetMapping(value = "/tweets/new")
+    @GetMapping("/tweets/new")
     public String getTweetForm(Model model) {
         model.addAttribute("tweet", new Tweet());
         return "newTweet";
+        //* serve up the new tweet page, newTweet.html
     }
 
-    @PostMapping(value = "/tweets")
+    @PostMapping("/tweets")
     public String submitTweetForm(@Valid Tweet tweet, BindingResult bindingResult, Model model) {
-        // I'm not sure you need to pass in a user if you know there is only one user logged in
-        // I would have to know more about what you want to do, but you should be able to just get the user
-        // without passing a user object as you have now in getLoggedInUser
         User user = userService.getLoggedInUser(tweet.getUser());
         if (!bindingResult.hasErrors()) {
             tweet.setUser(user);
@@ -52,5 +51,6 @@ public class TweetController {
             model.addAttribute("tweet", new Tweet());
         }
         return "newTweet";
+        //*handles the form submission from new tweet page. Gets the logged in user and associates them with the tweets.
     }
 }

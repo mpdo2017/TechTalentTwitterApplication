@@ -1,13 +1,13 @@
 package com.tts.TechTalentTwitter.controller;
 
+import com.tts.TechTalentTwitter.model.User;
+import com.tts.TechTalentTwitter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import com.tts.TechTalentTwitter.service.UserService;
-import com.tts.TechTalentTwitter.model.User;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
 
@@ -22,19 +22,20 @@ public class AuthorizationController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/login")
+    @RequestMapping(value = "/login")
     public String login() {
+
         return "login";
     }
 
-    @GetMapping(value = "/signup")
+    @RequestMapping(value = "/signup")
     public String registration(Model model) {
         User user = new User();
         model.addAttribute("user", user);
         return "registration";
     }
 
-    @PostMapping(value = "/signup")
+    @RequestMapping(value = "/signup",method= RequestMethod.GET)
     public String createNewUser(@Valid User user, BindingResult bindingResult, Model model) {
         // you were missing some getters/setters
         User userExists = userService.findByUsername(user.getUsername());

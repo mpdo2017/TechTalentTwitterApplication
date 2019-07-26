@@ -1,5 +1,8 @@
 package com.tts.TechTalentTwitter.model;
+
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -7,12 +10,20 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+
+import com.tts.TechTalentTwitter.service.TweetService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.ui.Model;
+
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Email;
 
 
 /**
@@ -29,13 +40,24 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private Long id;
 
+    @Email(message = "Please provide a valid email")
+    @NotEmpty(message = "Please provide an email")
     private String email;
+
+    @Length(min = 3, message = "Your username must have at least 3 characters")
+    @Length(max = 15, message = "Your username cannot have more than 15 characters")
+    @Pattern(regexp = "[^\\s]+", message = "Your username cannot contain spaces")
     private String username;
+
+    @Length(min = 5, message = "Your password must have at least 5 characters")
     private String password;
+
+    @NotEmpty(message = "Please provide your first name")
     private String firstName;
+    @NotEmpty(message = "Please provide your last name")
     private String lastName;
     private int active;
 
@@ -47,73 +69,92 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    public String getUsername()
-    {
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_follower", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "follower_id"))
+    private List<User> followers;
+
+    @ManyToMany(mappedBy = "followers")
+    private List<User> following;
+
+
+    public String getUsername() {
+
         return username;
     }
 
-    public void setUsername(String username)
-    {
+    public void setUsername(String username) {
+
         this.username = username;
     }
 
-    public String getEmail()
-    {
+    public String getEmail() {
+
         return email;
     }
 
-    public void setEmail(String email)
-    {
+    public void setEmail(String email) {
+
         this.email = email;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
+
         return password;
     }
 
-    public void setPassword(String password)
-    {
+    public void setPassword(String password) {
+
         this.password = password;
     }
 
-    public String getFirstName()
-    {
+    public String getFirstName() {
+
         return firstName;
     }
 
-    public void setFirstName(String firstName)
-    {
+    public void setFirstName(String firstName) {
+
         this.firstName = firstName;
     }
 
-    public String getLastName()
-    {
+    public String getLastName() {
+
         return lastName;
     }
 
-    public void setLastName(String lastName)
-    {
+    public void setLastName(String lastName) {
+
         this.lastName = lastName;
     }
 
-    public int getActive()
-    {
+    public int getActive() {
+
         return active;
     }
 
-    public void setActive(int active)
-    {
+    public void setActive(int active) {
+
         this.active = active;
     }
 
-    public Set<Role> getRoles()
-    {
+    public Set<Role> getRoles() {
+
         return roles;
     }
 
-    public void setRoles(Set<Role> roles)
-    {
+    public void setRoles(Set<Role> roles) {
+
         this.roles = roles;
     }
+
+    private void SetTweetCounts(List<User> users, Model model) {
+        HashMap<String, Integer> tweetCounts = new HashMap<>();
+        for (User user : users) {
+            TweetService tweetService= new TweetService();
+            List<Tweet> tweets = tweetService.findAllByUser(user);
+            tweetCounts.put(user.getUsername(), tweets.size());
+        }
+        model.addAttribute("tweetCounts", tweetCounts);
+    }
+
 }

@@ -7,9 +7,12 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Length;
+
 import java.util.Date;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * @author Michele Lanning
@@ -31,6 +34,8 @@ public class Tweet {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
+    @NotEmpty(message= "Tweet cannot be empty")
+    @Length(max = 280, message = "Tweet cannot have more than 280 characters")
     private String message;
 
     @CreationTimestamp
@@ -38,26 +43,31 @@ public class Tweet {
 
     public User getUser()
     {
+
         return user;
     }
 
     public void setUser(User user)
     {
+
         this.user = user;
     }
 
     public String getMessage()
     {
+
         return message;
     }
 
     public void setMessage(String message)
     {
+
         this.message = message;
     }
 
     public Long getId()
     {
+
         return id;
     }
 }
