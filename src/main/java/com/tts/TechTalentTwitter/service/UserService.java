@@ -5,6 +5,7 @@ import com.tts.TechTalentTwitter.model.User;
 import com.tts.TechTalentTwitter.repository.RoleRepository;
 import com.tts.TechTalentTwitter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,7 @@ public class UserService {
     }
 
     public User getLoggedInUser(User user) {
+        String loggedInUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByUsername(user.getUsername());
 
     }

@@ -59,6 +59,7 @@ public class User {
     private String firstName;
     @NotEmpty(message = "Please provide your last name")
     private String lastName;
+
     private int active;
 
     @CreationTimestamp
@@ -147,14 +148,6 @@ public class User {
         this.roles = roles;
     }
 
-    private void SetTweetCounts(List<User> users, Model model) {
-        HashMap<String, Integer> tweetCounts = new HashMap<>();
-        for (User user : users) {
-            TweetService tweetService= new TweetService();
-            List<Tweet> tweets = tweetService.findAllByUser(user);
-            tweetCounts.put(user.getUsername(), tweets.size());
-        }
-        model.addAttribute("tweetCounts", tweetCounts);
-    }
+
 
 }
