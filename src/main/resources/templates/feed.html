@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<script type="text/javascript" src="static/custom.js"></script>
 <html>
 <head th:include="fragments/head">
     <title id="title">Tweet Feed</title>
@@ -7,16 +8,39 @@
 <body>
 <div class="container">
     <div th:replace="fragments/navbar"></div>
+    <ul class="nav nav-tabs">
+        <li role="presentation" th:classappend="${filter == 'all' ? 'active' : '' }">
+            <a href="/tweets">All</a></li>
+        <li role="presentation" th:classappend="${filter == 'following' ? 'active' : '' }"><a href="/tweets?filter=following">Following</a></li>
+    </ul>
+    <br/>
     <h2>Tweets</h2>
     <div th:each="tweet:${tweetList}">
-        <h5>@<span th:text="${tweet.user.username}"></span>
-            <small th:text="${tweet.date}"></small>
-        </h5>
+
+        <form id="searchForm" action="search()" th:object="tweet:${tweetList}">
+            <div class="input-group">
+                First name:<br><input class="textSearch" type="text" name="firstname"><br>
+                Last name: <br><input class="textSearch" type="text" name="lastname"><br>
+                Username:<br><input class="textSearch" type="text" name="username"><br>
+                Date:<br><input class="textSearch" type="text" name="date" value="m/d/yy"><br>
+                <button class="btn btn-md btn-success btn-block" onclick=document.getElementById('searchForm').submit();>Filter Feed</button>
+            </div>
+        </form>
+
+        <h5> @ <span th:text="${tweet.user.username}"></span><small><span th:text="${tweet.date}"></span></small></h5>
         <p th:utext="${tweet.message}"></p>
     </div>
+
     <div th:if="${#lists.isEmpty(tweetList)}">
         <h3>No tweets have been created</h3>
     </div>
+    <div th:if="${#lists.isEmpty(tweetList) and filter == 'all'}">
+        <h3>No tweets have been created yet</h3>
+    </div>
+    <div th:if="${#lists.isEmpty(tweetList) and filter == 'following'}">
+        <h3>No tweets have been created by your followers</h3>
+    </div>
+
 </div>
 </body>
 </html>
