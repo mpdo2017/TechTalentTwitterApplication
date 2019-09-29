@@ -9,7 +9,8 @@
 <div class="container">
     <div th:replace="fragments/navbar"></div>
     <h2>Sign up</h2>
-    <form th:action="@{/signup}" th:object="${user}" method="post" autocomplete="off">
+    <h3 th:text="${success} ? ${success}: ''"></h3>
+    <form th:style="${success} ? 'display: none;' : ''" th:action="@{/signup}" th:object="${user}" method="post" autocomplete="off">
 
         <div class="form-group">
             <label th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"

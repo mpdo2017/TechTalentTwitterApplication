@@ -22,22 +22,22 @@ public class AuthorizationController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
 
         return "login";
     }
 
-    @RequestMapping(value = "/signup")
+    @RequestMapping(value = "/signup", method= RequestMethod.GET)
     public String registration(Model model) {
         User user = new User();
         model.addAttribute("user", user);
         return "registration";
     }
 
-    @RequestMapping(value = "/signup",method= RequestMethod.GET)
+    @RequestMapping(value = "/signup",method= RequestMethod.POST)
     public String createNewUser(@Valid User user, BindingResult bindingResult, Model model) {
-        // you were missing some getters/setters
+
         User userExists = userService.findByUsername(user.getUsername());
         if (userExists != null) {
             bindingResult.rejectValue("username", "error.user", "Username is already taken");
