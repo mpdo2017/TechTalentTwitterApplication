@@ -29,7 +29,7 @@ public class UserController {
     @Autowired
     private TweetService tweetService;
 
-    @GetMapping(value = "/users/username")
+    @GetMapping(value = "/users/{username}")
     public String getUser(@PathVariable("username") String username, Model model) {
 
         User loggedInUser = userService.getLoggedInUser();
@@ -54,24 +54,25 @@ public class UserController {
     @GetMapping(value = "/users")
     public String getUsers(@RequestParam(value = "filter", required = false)
                                    String filter, Model model) {
-        List<User> users = new ArrayList<User>();
+        List<User> users = userService.findAll();
         User loggedInUser = userService.getLoggedInUser();
         List<User> usersFollowing = loggedInUser.getFollowing();
-        List<User> usersFollowers = loggedInUser.getFollowers();
-        if (filter == null) {
-            filter = "all";
+        SetFollowingStatus(users, usersFollowing, model);
+        model.addAttribute("users", users);
+        SetTweetCounts(users, model);
+        return "users";
+
+        User loggedInUser = userService.getLoggedInUser();
+        List<User> following = loggedInUser.getFollowing();
+        boolean isFollowing = false;
+        for (User followedUser : following) {
+            if (followedUser.getUsername().equals(username)) {
+                isFollowing = true;
+            }
         }
-        if (filter.equalsIgnoreCase("followers")) {
-            users = usersFollowers;
-            model.addAttribute("filter", "followers");
-        } else if (filter.equalsIgnoreCase("following")) {
-            users = usersFollowing;
-            model.addAttribute("filter", "following");
-        } else {
-            users = userService.findAll();
-            model.addAttribute("filter", "all");
-        }
-...
+        model.addAttribute("following", isFollowing);
+        boolean isSelfPage = loggedInUser.getUsername().equals(username);
+        model.addAttribute("isSelfPage", isSelfPage);
 
     }
 
@@ -96,11 +97,5 @@ public class UserController {
         }
         model.addAttribute("followingStatus", followingStatus);
     }
-
-    //** @GetMapping(value = {"/users/${user.username}"})
-    //public String getUsersProfile(@PathVariable ("user.username") String username, Model model) {
-    //List<User> users = userService.
-    //User loggedInUser = userService.getLoggedInUser();
-    //Return "userProfile";
 
 }

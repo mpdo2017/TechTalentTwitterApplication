@@ -42,6 +42,11 @@ public class Tweet {
     @CreationTimestamp
     private Date createdAt;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "tweet_tag", joinColumns = @JoinColumn(name = "tweet_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<Tag> tags;
+
     public User getUser()
     {
 

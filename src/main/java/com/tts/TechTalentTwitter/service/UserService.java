@@ -1,6 +1,7 @@
 package com.tts.TechTalentTwitter.service;
 
 import com.tts.TechTalentTwitter.model.Role;
+import com.tts.TechTalentTwitter.model.Tweet;
 import com.tts.TechTalentTwitter.model.User;
 import com.tts.TechTalentTwitter.repository.RoleRepository;
 import com.tts.TechTalentTwitter.repository.UserRepository;
@@ -60,5 +61,10 @@ public class UserService {
         String loggedInUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByUsername(user.getUsername());
 
+    }
+
+    public List<Tweet> findAll() {
+        List<Tweet> tweets = tweetRepository.findAllByOrderByCreatedAtDesc();
+        return formatTweets(tweets);
     }
 }

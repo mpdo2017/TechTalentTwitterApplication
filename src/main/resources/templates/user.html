@@ -32,6 +32,12 @@
     </div>
     <div th:if="${#lists.isEmpty(tweetList)}">
         <h3>No Recent Tweets</h3>
+        <form th:action="@{/follow/} + ${user.username}" th:if="${!following}" method="post">
+            <button th:if="${!following && !isSelfPage}" style="float:right" type="Submit" class="btn btn-lg btn-success">Follow</button>
+        </form>
+        <form th:action="@{/unfollow/} + ${user.username}" th:if="${following}" method="post">
+            <button th:if="${!following && !isSelfPage}" style="float:right" type="Submit" class="btn btn-lg btn-primary unfollow_btn">Following</button>
+        </form>
     </div>
 </div>
 <div th:if="${#lists.isEmpty(users) and filter == 'followers'}"><h3>You don't have any followers</h3></div>
