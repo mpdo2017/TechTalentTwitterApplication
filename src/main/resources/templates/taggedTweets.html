@@ -13,7 +13,7 @@
             <div class="d-flex w-100 justify-content-between">
                 <a class="username" th:href="@{/users/} + ${tweet.user.username}"><h5>
                     @<span th:text="${tweet.user.username}"></span></a>
-                <small th:text="${#dates.format(tweet.createdAt, 'M/d/yy')}"></small>
+                <small th:text="${tweet.date}"></small>
                 </h5>
             </div>
             <p class="mb-1" th:utext="${tweet.message}"></p>

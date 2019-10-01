@@ -4,6 +4,7 @@ import com.tts.TechTalentTwitter.model.Role;
 import com.tts.TechTalentTwitter.model.Tweet;
 import com.tts.TechTalentTwitter.model.User;
 import com.tts.TechTalentTwitter.repository.RoleRepository;
+import com.tts.TechTalentTwitter.repository.TweetRepository;
 import com.tts.TechTalentTwitter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,24 +25,22 @@ public class UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private TweetRepository tweetRepository;
 
     @Autowired
     public UserService(UserRepository userRepository,
                        RoleRepository roleRepository,
-                       BCryptPasswordEncoder bCryptPasswordEncoder) {
+                       BCryptPasswordEncoder bCryptPasswordEncoder, TweetRepository tweetRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.tweetRepository = tweetRepository;
     }
+
 
     public User findByUsername(String username) {
 
         return userRepository.findByUsername(username);
-    }
-
-    public List<User> findAll() {
-
-        return (List<User>) userRepository.findAll();
     }
 
     public void save(User user) {
@@ -61,6 +60,11 @@ public class UserService {
         String loggedInUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByUsername(user.getUsername());
 
+    }
+
+    public List<User> findAll() {
+
+        return (List<User>) userRepository.findAll();
     }
 
     public List<Tweet> findAll() {

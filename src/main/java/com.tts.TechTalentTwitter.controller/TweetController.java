@@ -35,17 +35,17 @@ public class TweetController {
         List<TweetDisplay> tweets = new ArrayList<>();
         if (filter == null) {
             filter = "all";
-            if (filter.equalsIgnoreCase("following")) {
-                List<User> following = loggedInUser.getFollowing();
-                tweets = tweetService.findAllByUsers(following);
-                model.addAttribute("filter", "following");
-            } else {
-                tweets = tweetService.findAll();
-                model.addAttribute("filter", "all");
-            }
-            model.addAttribute("tweetList", tweets);
-            return "feed";
         }
+        if (filter.equalsIgnoreCase("following")) {
+            List<User> following = loggedInUser.getFollowing();
+            tweets = tweetService.findAllByUsers(following);
+            model.addAttribute("filter", "following");
+        } else {
+            tweets = tweetService.findAll();
+            model.addAttribute("filter", "all");
+        }
+        model.addAttribute("tweetList", tweets);
+        return "feed";
     }
 
     @GetMapping("/tweets/new")

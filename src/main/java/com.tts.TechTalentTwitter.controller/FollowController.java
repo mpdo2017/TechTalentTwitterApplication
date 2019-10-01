@@ -1,4 +1,4 @@
-package com.tts.TechTalentTwitter.com.tts.TechTalentTwitter.controller;
+package com.tts.TechTalentTwitter.controller;
 
 import com.tts.TechTalentTwitter.model.User;
 import com.tts.TechTalentTwitter.service.UserService;
